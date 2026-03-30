@@ -25,4 +25,14 @@ export class ProductsService {
     const NewProduct = this.ProductRepositorio.create(dados);
     return await this.ProductRepositorio.save(NewProduct);
   }
+
+  async findAll() {
+    return await this.ProductRepositorio.find();
+  }
+
+  async find(id: number) {
+    return await this.ProductRepositorio.findOne({
+      where: { id: id },
+    });
+  }
 }

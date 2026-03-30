@@ -8,9 +8,9 @@ async function bootstrap() {
   app.useGlobalPipes(
     //config do dto
     new ValidationPipe({
-      whitelist: true, 
-      forbidNonWhitelisted: true, 
-      transform: true, 
+      whitelist: true,
+      forbidNonWhitelisted: true,
+      transform: true,
     }),
   );
 
