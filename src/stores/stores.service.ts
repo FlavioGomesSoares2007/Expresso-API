@@ -5,11 +5,11 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { Repository } from 'typeorm';
-import { StoresEntity } from './entities/Stores.entity';
+import { StoresEntity } from './entities/Stores.Entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { StoresDto } from './dto/Stores.dto';
+import { StoresDto } from './dto/StoresCreateDto';
 import * as bcrypt from 'bcrypt';
-import { StoresUpdateDto } from './dto/StoresUpdate.dto';
+import { StoresUpdateDto } from './dto/StoresUpdateDto';
 @Injectable()
 export class StoresService {
   constructor(
@@ -51,14 +51,17 @@ export class StoresService {
       ...dados,
       password: hashedPassword,
     });
-
-    return await this.StoresRepositorio.save(newStore);
+    await this.StoresRepositorio.save(newStore);
+    const { password, ...data } = newStore;
+    return {
+      newStore: data,
+    };
   }
 
   async seeData(id: number) {
     return await this.StoresRepositorio.findOne({
       where: { id: id },
-      relations:['products']
+      relations: ['products'],
     });
   }
 
@@ -70,9 +73,18 @@ export class StoresService {
     if (!store) {
       throw new NotFoundException('Loja inexistente');
     }
-    Object.assign(store, dados);
 
-    return await this.StoresRepositorio.save(store);
+    if (dados.password) {
+      dados.password = await bcrypt.hash(dados.password, 10);
+    }
+
+    Object.assign(store, dados);
+    await this.StoresRepositorio.save(store);
+    const { password, ...data } = store;
+
+    return {
+      store: data,
+    };
   }
 
   async delete(id: number) {

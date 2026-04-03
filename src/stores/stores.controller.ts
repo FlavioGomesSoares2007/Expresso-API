@@ -9,10 +9,9 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { StoresService } from './stores.service';
-import { StoresDto } from './dto/Stores.dto';
-import { request } from 'http';
+import { StoresDto } from './dto/StoresCreateDto';
 import { AuthGuard } from '../auth/auth.guard';
-import { StoresUpdateDto } from './dto/StoresUpdate.dto';
+import { StoresUpdateDto } from './dto/StoresUpdateDto';
 
 @Controller('stores')
 export class StoresController {
