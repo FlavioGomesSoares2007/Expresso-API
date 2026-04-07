@@ -6,20 +6,24 @@ import {
   Patch,
   Post,
   Req,
+  UploadedFile,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import { StoresService } from './stores.service';
 import { StoresDto } from './dto/StoresCreateDto';
 import { AuthGuard } from '../auth/auth.guard';
 import { StoresUpdateDto } from './dto/StoresUpdateDto';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('stores')
 export class StoresController {
   constructor(private readonly StoresServices: StoresService) {}
 
   @Post()
-  async create(@Body() dados: StoresDto) {
-    return await this.StoresServices.create(dados);
+  @UseInterceptors(FileInterceptor('file'))
+  async create(@Body() dados: StoresDto, @UploadedFile() file:  Express.Multer.File) {
+    return await this.StoresServices.create(dados, file);
   }
 
   @UseGuards(AuthGuard)

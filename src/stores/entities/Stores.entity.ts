@@ -48,6 +48,9 @@ export class StoresEntity {
   })
   slug!: string;
 
+  @Column({ name: 'imageUrl', type: 'varchar', length: 255, nullable: true })
+  logoUrl?: string;
+
   @Column({ name: 'is_active', default: true })
   isActive!: boolean;
 

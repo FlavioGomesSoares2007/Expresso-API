@@ -22,7 +22,7 @@ export class ProductEntity {
   @Column({ type: 'decimal', precision: 10, scale: 2 })
   price!: number;
 
-  @Column({ type: 'varchar', length: 255, nullable: true })
+  @Column({ name: 'imageUrl', type: 'varchar', length: 255, nullable: true })
   imageUrl?: string;
 
   @ManyToOne(() => StoresEntity, (store) => store.products, {
