@@ -27,6 +27,7 @@ export class StoresDto {
   @Matches(/^[a-z0-9-]+$/, {
     message: 'O slug deve conter apenas letras minúsculas, números e traços',
   })
+  
   @MinLength(3, { message: 'O slug deve ter no mínimo 3 caracteres' })
   slug!: string;
 

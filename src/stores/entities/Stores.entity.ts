@@ -7,10 +7,11 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { ProductEntity } from '../../products/entities/productEntity';
+import { CategoriesEntity } from '../../categories/entites/CategoriesEntity';
 
 @Entity('stores')
 export class StoresEntity {
-  @PrimaryGeneratedColumn({ name: 'Id_Store' })
+  @PrimaryGeneratedColumn({ name: 'id_Store' })
   id!: number;
 
   @Column({
@@ -62,4 +63,7 @@ export class StoresEntity {
 
   @OneToMany(() => ProductEntity, (products) => products.id_store)
   products!: ProductEntity[];
+
+  @OneToMany(() => CategoriesEntity, (category) => category.id_store)
+  categories!: CategoriesEntity[];
 }

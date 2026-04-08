@@ -23,7 +23,12 @@ export class ProductsService {
     id: number,
     file: Express.Multer.File,
   ) {
-    const image = await this.cloudinaryService.uploadFile(file, 'product');
+    const image = await this.cloudinaryService.uploadFile(
+      file,
+      'product',
+      500,
+      500,
+    );
     const exists = await this.productRepositorio.findOne({
       where: { name: dados.name, id_store: { id: id } },
     });
@@ -76,7 +81,12 @@ export class ProductsService {
         await this.cloudinaryService.deleteFile(publicId);
       }
 
-      const image = await this.cloudinaryService.uploadFile(file, 'product');
+      const image = await this.cloudinaryService.uploadFile(
+        file,
+        'product',
+        500,
+        500,
+      );
       dados.imageUrl = image.secure_url;
     }
 

@@ -7,10 +7,11 @@ import {
   CreateDateColumn,
 } from 'typeorm';
 import { StoresEntity } from '../../stores/entities/Stores.Entity';
+import { CategoriesEntity } from '../../categories/entites/CategoriesEntity';
 
 @Entity('products')
 export class ProductEntity {
-  @PrimaryGeneratedColumn({ name: 'Id_Product' })
+  @PrimaryGeneratedColumn({ name: 'id_Product' })
   id!: number;
 
   @Column({ type: 'varchar', length: 100 })
@@ -31,6 +32,13 @@ export class ProductEntity {
   })
   @JoinColumn({ name: 'id_store' })
   id_store!: StoresEntity;
+
+  @ManyToOne(() => CategoriesEntity, (category) => category.products, {
+    onDelete: 'CASCADE',
+    nullable: false,
+  })
+  @JoinColumn({ name: 'id_category' })
+  category!: CategoriesEntity;
 
   @CreateDateColumn()
   createdAt!: Date;

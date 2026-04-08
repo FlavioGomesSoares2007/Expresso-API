@@ -18,45 +18,47 @@ export class StoresService {
     private readonly cloudinaryService: CloudinaryService,
   ) {}
 
-async create(dados: StoresDto, file?: Express.Multer.File) {
-  const exists = await this.storesRepositorio.findOne({
-    where: [
-      { slug: dados.slug },
-      { email: dados.email },
-      { name: dados.name },
-    ],
-  });
+  async create(dados: StoresDto, file?: Express.Multer.File) {
+    const exists = await this.storesRepositorio.findOne({
+      where: [
+        { slug: dados.slug },
+        { email: dados.email },
+        { name: dados.name },
+      ],
+    });
 
-  if (exists) {
-    if (exists.name === dados.name) throw new ConflictException('Nome já cadastrado');
-    if (exists.email === dados.email) throw new ConflictException('E-mail já cadastrado');
-    if (exists.slug === dados.slug) throw new ConflictException('Slug já cadastrado');
+    if (exists) {
+      if (exists.name === dados.name)
+        throw new ConflictException('Nome já cadastrado');
+      if (exists.email === dados.email)
+        throw new ConflictException('E-mail já cadastrado');
+      if (exists.slug === dados.slug)
+        throw new ConflictException('Slug já cadastrado');
+    }
+
+    if (file) {
+      const image = await this.cloudinaryService.uploadFile(file, 'stores', 500, 500);
+      dados.logoUrl = image.secure_url;
+    }
+
+    const hashedPassword = await bcrypt.hash(dados.password, 10);
+
+    const newStore = this.storesRepositorio.create({
+      ...dados,
+      password: hashedPassword,
+    });
+
+    await this.storesRepositorio.save(newStore);
+
+    const { password, ...data } = newStore;
+    return {
+      store: data,
+    };
   }
-
-  if (file) {
-    const image = await this.cloudinaryService.uploadFile(file, 'stores');
-    dados.logoUrl = image.secure_url;
-  }
-
-  const hashedPassword = await bcrypt.hash(dados.password, 10);
-
-  const newStore = this.storesRepositorio.create({
-    ...dados,
-    password: hashedPassword,
-  });
-
-  await this.storesRepositorio.save(newStore);
-
-  const { password, ...data } = newStore;
-  return {
-    store: data,
-  };
-}
 
   async seeData(id: number) {
     return await this.storesRepositorio.findOne({
       where: { id: id },
-      relations: ['products'],
     });
   }
 
@@ -79,7 +81,7 @@ async create(dados: StoresDto, file?: Express.Multer.File) {
         await this.cloudinaryService.deleteFile(publicId);
       }
 
-      const image = await this.cloudinaryService.uploadFile(file, 'store');
+      const image = await this.cloudinaryService.uploadFile(file, 'store', 500, 500);
       dados.logoUrl = image.secure_url;
     }
 
@@ -95,27 +97,44 @@ async create(dados: StoresDto, file?: Express.Multer.File) {
   async delete(id_store: number) {
   const store = await this.storesRepositorio.findOne({
     where: { id: id_store },
-    relations: ['products'], 
+    relations: ['products', 'categories'], 
   });
 
   if (!store) throw new NotFoundException('Loja não encontrada');
 
   if (store.products && store.products.length > 0) {
-    const deletePromises = store.products.map(async (product) => {
-      if (product.imageUrl) {
-        const publicId = this.cloudinaryService.extractPublicId(product.imageUrl);
+    const deleteProductsPromises = store.products
+      .filter(prod => !!prod.imageUrl)
+      .map(prod => {
+        const publicId = this.cloudinaryService.extractPublicId(prod.imageUrl!);
         return this.cloudinaryService.deleteFile(publicId);
-      }
-    });
-    await Promise.all(deletePromises);
+      });
+    await Promise.all(deleteProductsPromises).catch(err => 
+      console.error('Erro ao deletar imagens dos produtos da loja:', err)
+    );
+  }
+
+  if (store.categories && store.categories.length > 0) {
+    const deleteCategoriesPromises = store.categories
+      .filter(cat => !!cat.imageUrl)
+      .map(cat => {
+        const publicId = this.cloudinaryService.extractPublicId(cat.imageUrl!);
+        return this.cloudinaryService.deleteFile(publicId);
+      });
+    await Promise.all(deleteCategoriesPromises).catch(err => 
+      console.error('Erro ao deletar imagens das categorias da loja:', err)
+    );
   }
 
   if (store.logoUrl) {
-    const logoId = this.cloudinaryService.extractPublicId(store.logoUrl);
-    await this.cloudinaryService.deleteFile(logoId);
+    try {
+      const logoId = this.cloudinaryService.extractPublicId(store.logoUrl);
+      await this.cloudinaryService.deleteFile(logoId);
+    } catch (err) {
+      console.error('Erro ao deletar logo da loja:', err);
+    }
   }
 
   return await this.storesRepositorio.remove(store);
 }
-  }
-
+}

@@ -12,12 +12,18 @@ export class CloudinaryService {
   uploadFile(
     file: any,
     folder: string,
+    width: number,
+    height: number,
   ): Promise<UploadApiErrorResponse | UploadApiResponse> {
     return new Promise((resolve, reject) => {
       const upload = cloudinary.uploader.upload_stream(
         {
           folder: `expresso_api/${folder}`,
           resource_type: 'auto',
+          transformation: [
+            { width: width, height: height, crop: 'limit' },
+            { quality: 'auto', fetch_format: 'auto' },
+          ],
         },
         (error, result) => {
           if (error) return reject(error);
@@ -45,8 +51,8 @@ export class CloudinaryService {
 
   extractPublicId(url: string): string {
     const parts = url.split('/');
-    const fileNameWithExtension = parts.pop() || ''; 
-    const folderPath = parts.slice(parts.indexOf('expresso_api')).join('/'); 
+    const fileNameWithExtension = parts.pop() || '';
+    const folderPath = parts.slice(parts.indexOf('expresso_api')).join('/');
     const publicId = `${folderPath}/${fileNameWithExtension.split('.')[0]}`;
     return publicId;
   }
