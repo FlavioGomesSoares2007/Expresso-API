@@ -1,18 +1,19 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { StoresEntity } from '../../store/entities/StoresEntity';
+import { OrderEntity } from '../../order/entitie/OrderEntity';
 
 @Entity('tables')
 export class TablesEntity {
-  @PrimaryGeneratedColumn({ name: 'id_table' })
-  id_table!: number;
+  @PrimaryGeneratedColumn('uuid', { name: 'id_table' })
+  id_table!: string;
 
   @Column({
-    name: 'name',
+    name: 'number',
     type: 'varchar',
     length: 20,
     nullable: false,
   })
-  name!: string;
+  number!: number;
 
   @Column({
     name: 'slug',
@@ -42,4 +43,5 @@ export class TablesEntity {
 
   @ManyToOne(() => StoresEntity, (store) => store.Tables)
   id_store!: StoresEntity;
+
 }

@@ -9,7 +9,9 @@ import { CategoriesModule } from './categorie/categories.module';
 import { StockModule } from './stock/stock.module';
 import { RevenueModule } from './revenue/revenue.module';
 import { TablesModule } from './table/tables.module';
-import { KitchenModule } from './kitchen/kitchen.module';
+import { OrderModule } from './order/order.module';
+import { PaymentModule } from './payment/payment.module';
+import { SecurityModule } from './security/security.module';
 
 @Module({
   imports: [
@@ -34,7 +36,9 @@ import { KitchenModule } from './kitchen/kitchen.module';
     StockModule,
     RevenueModule,
     TablesModule,
-    KitchenModule,
+    OrderModule,
+    PaymentModule,
+    SecurityModule,
   ],
 })
 export class AppModule {}

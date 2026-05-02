@@ -10,8 +10,8 @@ import { StoresEntity } from '../../store/entities/StoresEntity';
 
 @Entity('categories')
 export class CategoriesEntity {
-  @PrimaryGeneratedColumn({ name: 'id_category' })
-  id_category!: number;
+  @PrimaryGeneratedColumn('uuid',{ name: 'id_category' })
+  id_category!: string;
 
   @Column()
   name!: string;

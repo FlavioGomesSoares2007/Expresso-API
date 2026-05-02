@@ -24,13 +24,13 @@ export class ProductsService {
 
   async create(
     dados: CreateProductsDto,
-    id_store: number,
+    id_store: string,
     file: Express.Multer.File,
   ) {
     const myCategory = await this.categoryRepositorio.findOne({
       where: {
         id_category: dados.id_category,
-        id_store: { id: id_store },
+        id_store: { id_Store: id_store },
       },
     });
 
@@ -41,7 +41,7 @@ export class ProductsService {
     }
 
     const exists = await this.productRepositorio.findOne({
-      where: { name: dados.name, id_store: { id: id_store } },
+      where: { name: dados.name, id_store: { id_Store: id_store } },
     });
 
     if (exists) {
@@ -60,21 +60,21 @@ export class ProductsService {
     const newProduct = this.productRepositorio.create({
       ...dados,
       imageUrl: image.secure_url,
-      id_store: { id: id_store } as any,
+      id_store: { id_Store: id_store } as any,
       id_category: { id_category: dados.id_category } as any,
     });
 
     return await this.productRepositorio.save(newProduct);
   }
-  async findAll(id_store: number) {
+  async findAll(id_store: string) {
     return await this.productRepositorio.find({
-      where: { id_store: { id: id_store } },
-      relations: ['id_category'], // Traz os dados da categoria junto
+      where: { id_store: { id_Store: id_store } },
+      relations: ['id_category'],
     });
   }
-  async find(id: number, id_store: number) {
+  async find(id: string, id_store: string) {
     const product = await this.productRepositorio.findOne({
-      where: { id: id, id_store: { id: id_store } },
+      where: { id_Product: id, id_store: { id_Store: id_store } },
       relations: ['id_category'],
     });
 
@@ -82,13 +82,13 @@ export class ProductsService {
     return product;
   }
   async update(
-    id_product: number,
-    id_store: number,
+    id_product: string,
+    id_store: string,
     dados: ProductsUpdateDto,
     file?: Express.Multer.File,
   ) {
     const product = await this.productRepositorio.findOne({
-      where: { id: id_product, id_store: { id: id_store } },
+      where: { id_Product: id_product, id_store: { id_Store: id_store } },
     });
 
     if (!product) {
@@ -97,7 +97,7 @@ export class ProductsService {
 
     if (dados.id_category) {
       const catExists = await this.categoryRepositorio.findOne({
-        where: { id_category: dados.id_category, id_store: { id: id_store } },
+        where: { id_category: dados.id_category, id_store: { id_Store: id_store } },
       });
       if (!catExists)
         throw new ForbiddenException('Categoria destino inválida.');
@@ -128,9 +128,9 @@ export class ProductsService {
     Object.assign(product, dados);
     return await this.productRepositorio.save(product);
   }
-  async delete(id_product: number, id_store: number) {
+  async delete(id_product: string, id_store: string) {
     const product = await this.productRepositorio.findOne({
-      where: { id: id_product, id_store: { id: id_store } },
+      where: { id_Product: id_product, id_store: { id_Store: id_store } },
     });
 
     if (!product) {

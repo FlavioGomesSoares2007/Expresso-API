@@ -32,22 +32,19 @@ export class ProductsController {
   ) {
     return await this.productsService.create(dados, request.user.sub, file);
   }
-
   @Get()
   async findAll(@Req() request) {
     return await this.productsService.findAll(request.user.sub);
   }
-
   @Get(':id')
-  async find(@Param('id', ParseIntPipe) id: number, @Req() request) {
+  async find(@Param('id') id: string, @Req() request) {
     return await this.productsService.find(id, request.user.sub);
   }
-
   @Patch(':id')
   @UseInterceptors(FileInterceptor('file'))
   async update(
     @Body() dados: ProductsUpdateDto,
-    @Param('id', ParseIntPipe) id_product: number,
+    @Param('id') id_product: string,
     @Req() request,
     @UploadedFile() file: Express.Multer.File,
   ) {
@@ -58,9 +55,8 @@ export class ProductsController {
       file,
     );
   }
-
   @Delete(':id')
-  async delete(@Param('id', ParseIntPipe) id: number, @Req() requeste) {
+  async delete(@Param('id') id: string, @Req() requeste) {
     return await this.productsService.delete(id, requeste.user.sub);
   }
 }

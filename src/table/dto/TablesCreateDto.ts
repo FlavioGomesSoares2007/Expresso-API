@@ -1,10 +1,10 @@
 import {
   IsEnum,
   IsNotEmpty,
+  IsNumber,
   IsOptional,
   IsString,
   Matches,
-  MaxLength,
   MinLength,
 } from 'class-validator';
 
@@ -14,11 +14,9 @@ export enum TableStatus {
 }
 
 export class TablesCreateDto {
-  @IsString({ message: 'O nome tem que ser um texto' })
+  @IsNumber()
   @IsNotEmpty({ message: 'O nome é obrigatório' })
-  @MinLength(2, { message: 'O nome tem que ter no mínimo duas letras' })
-  @MaxLength(20, { message: 'O nome só pode ter 20 letras' })
-  name!: string;
+  number!: number;
 
   @IsString({ message: 'O slug deve ser uma string' })
   @IsNotEmpty({ message: 'O slug é obrigatório' })

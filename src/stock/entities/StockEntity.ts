@@ -3,15 +3,17 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { StoresEntity } from '../../store/entities/StoresEntity';
+import { RevenueEntity } from '../../revenue/entities/RevenueEntity';
 
 @Entity('stock')
 export class StockEntity {
-  @PrimaryGeneratedColumn({ name: 'id_stock' })
-  id_stock!: number;
+  @PrimaryGeneratedColumn('uuid', { name: 'id_stock' })
+  id_stock!: string;
 
   @Column({ name: 'name', type: 'varchar', length: 100, nullable: true })
   name!: string;
@@ -22,7 +24,7 @@ export class StockEntity {
   @Column({
     name: 'unit',
     type: 'enum',
-    enum: ['un', 'kg', 'g', 'l', 'ml', 'ft'],
+    enum: ['un', 'kg', 'g', 'l', 'ml', ],
     nullable: true,
   })
   unit!: string;
@@ -33,4 +35,7 @@ export class StockEntity {
 
   @UpdateDateColumn()
   updatedAt!: Date;
+
+  @OneToMany(() => RevenueEntity, (revenue) => revenue.stock)
+  revenue!: RevenueEntity[];
 }

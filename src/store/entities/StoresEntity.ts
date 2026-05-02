@@ -3,6 +3,7 @@ import {
   CreateDateColumn,
   Entity,
   OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -11,11 +12,12 @@ import { CategoriesEntity } from '../../categorie/entities/CategoriesEntity';
 import { StockEntity } from '../../stock/entities/StockEntity';
 import { RevenueEntity } from '../../revenue/entities/RevenueEntity';
 import { TablesEntity } from '../../table/entities/TablesEntity';
+import { PaymentEntity } from '../../payment/entities/PaymentEntity';
 
 @Entity('stores')
 export class StoresEntity {
-  @PrimaryGeneratedColumn({ name: 'id_Store' })
-  id!: number;
+  @PrimaryGeneratedColumn('uuid', { name: 'id_Store' })
+  id_Store!: string;
 
   @Column({
     name: 'name',
@@ -70,7 +72,7 @@ export class StoresEntity {
   @OneToMany(() => CategoriesEntity, (category) => category.id_store)
   categories!: CategoriesEntity[];
 
-  @OneToMany(() => RevenueEntity, (revenue) => revenue.id_store)
+  @OneToMany(() => RevenueEntity, (revenue) => revenue.store)
   revenue!: RevenueEntity[];
 
   @OneToMany(() => StockEntity, (stock) => stock.id_stock)
@@ -78,4 +80,7 @@ export class StoresEntity {
 
   @OneToMany(() => TablesEntity, (table) => table.id_store)
   Tables!: TablesEntity[];
+
+  @OneToOne(() => PaymentEntity, (payment) => payment.id_payment)
+  payment!: PaymentEntity;
 }

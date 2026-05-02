@@ -29,19 +29,19 @@ export class StockController {
     return await this.stockService.findAll(request.user.sub);
   }
   @Get(':id')
-  async findOne(@Param('id', ParseIntPipe) id_stock: number, @Req() request) {
+  async findOne(@Param('id',) id_stock: string, @Req() request) {
     return await this.stockService.findOne(request.user.sub, id_stock);
   }
   @Patch(':id')
   async update(
     @Body() dados: StockUpdateDto,
     @Req() requeste,
-    @Param('id', ParseIntPipe) id_stock,
+    @Param('id') id_stock: string,
   ) {
     return await this.stockService.update(dados, requeste.user.sub, id_stock);
   }
   @Delete(':id')
-  async delete(@Param('id', ParseIntPipe) id_stock: number, @Req() request) {
+  async delete(@Param('id') id_stock: string, @Req() request) {
     return await this.stockService.delete(id_stock, request.user.sub);
   }
 }

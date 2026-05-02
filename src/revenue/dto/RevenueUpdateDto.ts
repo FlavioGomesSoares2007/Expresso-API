@@ -1,6 +1,5 @@
 import {
   IsEnum,
-  IsNotEmpty,
   IsNumber,
   IsOptional,
   IsString,
@@ -33,4 +32,8 @@ export class RevenueUpdateDto {
   })
   @IsOptional()
   unit?: StockUnit;
+
+  @IsString()
+  @IsOptional()
+  id_stock?:string
 }

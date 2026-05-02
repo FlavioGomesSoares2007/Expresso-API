@@ -10,11 +10,12 @@ import {
 import { StoresEntity } from '../../store/entities/StoresEntity';
 import { CategoriesEntity } from '../../categorie/entities/CategoriesEntity';
 import { RevenueEntity } from '../../revenue/entities/RevenueEntity';
+import { OrderItemEntity } from '../../order/entitie/OrderItemEntity';
 
 @Entity('products')
 export class ProductEntity {
-  @PrimaryGeneratedColumn({ name: 'id_Product' })
-  id!: number;
+  @PrimaryGeneratedColumn('uuid', { name: 'id_Product' })
+  id_Product!: string;
 
   @Column({ type: 'varchar', length: 100 })
   name!: string;
@@ -42,9 +43,12 @@ export class ProductEntity {
   @JoinColumn({ name: 'id_category' })
   id_category!: CategoriesEntity;
 
-  @OneToMany(() => RevenueEntity, (revenue) => revenue.id_product)
+  @OneToMany(() => RevenueEntity, (revenue) => revenue.product)
   revenue!: RevenueEntity[];
 
   @CreateDateColumn()
   createdAt!: Date;
+
+  @OneToMany(() => OrderItemEntity, (orders)=>orders.product)
+  orders!: OrderItemEntity[];
 }

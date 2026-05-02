@@ -60,14 +60,14 @@ export class StoresService {
       store: data,
     };
   }
-  async seeData(id: number) {
+  async seeData(id: string) {
     return await this.storesRepositorio.findOne({
-      where: { id: id },
+      where: { id_Store: id },
     });
   }
-  async update(dados: StoresUpdateDto, id: number, file?: Express.Multer.File) {
+  async update(dados: StoresUpdateDto, id: string, file?: Express.Multer.File) {
     const store = await this.storesRepositorio.findOne({
-      where: { id: id },
+      where: { id_Store: id },
     });
 
     if (!store) {
@@ -101,9 +101,9 @@ export class StoresService {
       store: data,
     };
   }
-  async delete(id_store: number) {
+  async delete(id_store: string) {
     const store = await this.storesRepositorio.findOne({
-      where: { id: id_store },
+      where: { id_Store: id_store },
       relations: ['products', 'categories'],
     });
 

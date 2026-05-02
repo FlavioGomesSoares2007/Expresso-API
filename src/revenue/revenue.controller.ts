@@ -23,7 +23,7 @@ export class RevenueController {
   @Post(':id')
   async create(
     @Body() dados: RevenueCreateDto,
-    @Param('id', ParseIntPipe) id_product: number,
+    @Param('id') id_product: string,
     @Req() req,
   ) {
     return await this.revenueServices.create(dados, req.user.sub, id_product);
@@ -33,14 +33,14 @@ export class RevenueController {
     return await this.revenueServices.findAll(req.user.sub);
   }
   @Get(':id')
-  async findOne(@Param('id', ParseIntPipe) id_product: number, @Req() request) {
+  async findOne(@Param('id') id_product: string, @Req() request) {
     return await this.revenueServices.findOne(request.user.sub, id_product);
   }
   @Patch(':id')
   async update(
     @Body() dados: RevenueUpdateDto,
     @Req() requeste,
-    @Param('id', ParseIntPipe) id_product,
+    @Param('id') id_product: string,
   ) {
     return await this.revenueServices.update(
       dados,
@@ -49,7 +49,7 @@ export class RevenueController {
     );
   }
   @Delete(':id')
-  async delete(@Param('id', ParseIntPipe) id_product: number, @Req() request) {
+  async delete(@Param('id') id_product: string, @Req() request) {
     return await this.revenueServices.delete(id_product, request.user.sub);
   }
 }

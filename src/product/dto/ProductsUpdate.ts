@@ -27,8 +27,7 @@ export class ProductsUpdateDto {
   @IsOptional()
   imageUrl?: string;
 
-  @IsNumber()
+  @IsString()
   @IsOptional()
-  @Type(() => Number)
-  id_category?: number;
+  id_category?: string;
 }

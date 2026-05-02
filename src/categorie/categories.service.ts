@@ -20,12 +20,12 @@ export class CategoriesService {
 
   async create(
     dados: CategoryCreateDto,
-    id_store: number,
+    id_store: string,
     file: Express.Multer.File,
   ) {
     const category = await this.categoriesRepositorio.findOne({
       where: {
-        id_store: { id: id_store },
+        id_store: { id_Store: id_store },
         name: dados.name,
       },
     });
@@ -48,35 +48,35 @@ export class CategoriesService {
 
     const newCategory = this.categoriesRepositorio.create({
       ...dados,
-      id_store: { id: id_store },
+      id_store: { id_Store: id_store },
     });
     return await this.categoriesRepositorio.save(newCategory);
   }
-  async findAll(id_store: number) {
+  async findAll(id_store: string) {
     return await this.categoriesRepositorio.find({
       where: {
-        id_store: { id: id_store },
+        id_store: { id_Store: id_store },
       },
     });
   }
-  async find(id_category: number, id_store: number) {
+  async find(id_category: string, id_store: string) {
     return await this.categoriesRepositorio.findOne({
       where: {
         id_category: id_category,
-        id_store: { id: id_store },
+        id_store: { id_Store: id_store },
       },
     });
   }
   async update(
     dados: CategoryUpdateDto,
-    id_store: number,
-    id_category: number,
+    id_store: string,
+    id_category: string,
     file?: Express.Multer.File,
   ) {
     const category = await this.categoriesRepositorio.findOne({
       where: {
         id_category: id_category,
-        id_store: { id: id_store },
+        id_store: { id_Store: id_store },
       },
     });
 
@@ -103,11 +103,11 @@ export class CategoriesService {
     Object.assign(category, dados);
     return await this.categoriesRepositorio.save(category);
   }
-  async delete(id_category: number, id_store: number) {
+  async delete(id_category: string, id_store: string) {
     const category = await this.categoriesRepositorio.findOne({
       where: {
         id_category: id_category,
-        id_store: { id: id_store },
+        id_store: { id_Store: id_store },
       },
       relations: ['products'],
     });

@@ -16,12 +16,12 @@ export class RevenueService {
     private readonly revenueRepository: Repository<RevenueEntity>,
   ) {}
 
-  async create(dados: RevenueCreateDto, id_store: number, id_product: number) {
+  async create(dados: RevenueCreateDto, id_store: string, id_product: string) {
     const revenue = await this.revenueRepository.findOne({
       where: {
         name: dados.name,
-        id_store: { id: id_store },
-        id_product: { id: id_product },
+        store: { id_Store: id_store },
+        product: { id_Product: id_product },
       },
     });
     if (revenue) {
@@ -30,28 +30,29 @@ export class RevenueService {
 
     const newRevenue = this.revenueRepository.create({
       ...dados,
-      id_product: { id: id_product },
-      id_store: { id: id_store },
+      product: { id_Product:id_product },
+      store: { id_Store: id_store },
+      stock: { id_stock: dados.id_stock },
     });
     return await this.revenueRepository.save(newRevenue);
   }
-  async findAll(id_store: number) {
+  async findAll(id_store: string) {
     return await this.revenueRepository.find({
-      where: { id_store: { id: id_store } },
+      where: { store: { id_Store: id_store } },
     });
   }
-  async findOne(id_Store: number, id_product: number) {
+  async findOne(id_Store: string, id_product: string) {
     return await this.revenueRepository.findOne({
       where: {
-        id_store: { id: id_Store },
-        id_product: { id: id_product },
+        store: { id_Store: id_Store },
+        product: { id_Product: id_product },
       },
     });
   }
-  async update(dados: RevenueUpdateDto, id_store: number, id_revenue: number) {
+  async update(dados: RevenueUpdateDto, id_store: string, id_revenue: string) {
     const revenue = await this.revenueRepository.findOne({
       where: {
-        id_store: { id: id_store },
+        store: { id_Store: id_store },
         id_revenue: id_revenue,
       },
     });
@@ -63,10 +64,10 @@ export class RevenueService {
     Object.assign(revenue, dados);
     return await this.revenueRepository.save(revenue);
   }
-  async delete(id_store: number, id_revenue: number) {
+  async delete(id_store: string, id_revenue: string) {
     const revenue = await this.revenueRepository.findOne({
       where: {
-        id_store: { id: id_store },
+        store: { id_Store: id_store },
         id_revenue: id_revenue,
       },
     });

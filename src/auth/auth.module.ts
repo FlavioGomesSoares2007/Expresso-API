@@ -4,6 +4,7 @@ import { AuthService } from './auth.service';
 import { JwtModule } from '@nestjs/jwt';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { StoresEntity } from '../store/entities/StoresEntity';
+import { TablesEntity } from '../table/entities/TablesEntity';
 
 @Module({
   imports: [
@@ -15,7 +16,7 @@ import { StoresEntity } from '../store/entities/StoresEntity';
       }),
     }),
 
-    TypeOrmModule.forFeature([StoresEntity]),
+    TypeOrmModule.forFeature([StoresEntity, TablesEntity]),
   ],
   controllers: [AuthController],
   providers: [AuthService],

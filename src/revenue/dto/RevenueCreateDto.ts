@@ -25,4 +25,8 @@ export class RevenueCreateDto {
   })
   @IsNotEmpty({ message: 'A unidade é obrigatorio' })
   unit!: StockUnit;
+
+  @IsString()
+  @IsNotEmpty()
+  id_stock!:string
 }

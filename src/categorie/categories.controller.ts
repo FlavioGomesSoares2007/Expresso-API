@@ -38,15 +38,14 @@ export class CategoriesController {
     return await this.categorySevice.findAll(request.user.sub);
   }
   @Get(':id')
-  async find(@Param('id', ParseIntPipe) id_category: number, @Req() request) {
+  async find(@Param('id') id_category: string, @Req() request) {
     return await this.categorySevice.find(id_category, request.user.sub);
   }
-
   @Patch(':id')
   @UseInterceptors(FileInterceptor('file'))
   async update(
     @Body() dados: CategoryUpdateDto,
-    @Param('id', ParseIntPipe) id_category: number,
+    @Param('id') id_category: string,
     @Req() request,
     @UploadedFile() file: Express.Multer.File,
   ) {
@@ -57,9 +56,8 @@ export class CategoriesController {
       file,
     );
   }
-
   @Delete(':id')
-  async delete(@Param('id', ParseIntPipe) id: number, @Req() req) {
+  async delete(@Param('id') id: string, @Req() req) {
     return await this.categorySevice.delete(id, req.user.sub);
   }
 }

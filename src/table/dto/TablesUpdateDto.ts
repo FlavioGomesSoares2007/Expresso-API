@@ -1,19 +1,18 @@
 import {
   IsEnum,
+  IsNumber,
   IsOptional,
   IsString,
   Matches,
   MaxLength,
   MinLength,
 } from 'class-validator';
-import { TableStatus } from './TablesCreateDto'; 
+import { TableStatus } from './TablesCreateDto';
 
 export class TablesUpdateDto {
   @IsOptional()
-  @IsString({ message: 'O nome tem que ser um texto' })
-  @MinLength(2, { message: 'O nome tem que ter no mínimo duas letras' })
-  @MaxLength(20, { message: 'O nome só pode ter 20 letras' })
-  name?: string;
+  @IsNumber()
+  number?: number;
 
   @IsOptional()
   @IsString({ message: 'O slug deve ser uma string' })
@@ -23,9 +22,9 @@ export class TablesUpdateDto {
   @MinLength(3, { message: 'O slug deve ter no mínimo 3 caracteres' })
   slug?: string;
 
- @IsOptional()
+  @IsOptional()
   @IsString({ message: 'A senha deve ser uma string' })
-  @MinLength(6, {message:'A senha tem que ter no minimo 6 caracteris'})
+  @MinLength(6, { message: 'A senha tem que ter no minimo 6 caracteris' })
   password?: string;
 
   @IsOptional()
